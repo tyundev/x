@@ -78,6 +78,9 @@ func RemoveFile(pathFile string) error {
 
 func CheckFileExist(filename string) bool {
 	info, err := os.Stat(filename)
+	if err!= nil{
+		return false
+	}
 	if os.IsNotExist(err) {
 		return false
 	}
