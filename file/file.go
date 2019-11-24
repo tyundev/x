@@ -213,7 +213,6 @@ func CopyFolder(source string, dest string) (err error) {
 	return err
 }
 
-
 func CopyFile(source string, dest string) (err error) {
 	sourcefile, err := os.Open(source)
 	if err != nil {
@@ -239,4 +238,20 @@ func CopyFile(source string, dest string) (err error) {
 	}
 
 	return
+}
+
+func FilePathWalkDir(root string) ([]string, error) {
+	var files []string
+	err := filepath.Walk(root, func(path string, info os.FileInfo, err error) error {
+		if !info.IsDir() {
+			files = append(files, path)
+		} else {
+			var fNew, err = FilePathWalkDir(path)
+			if err == nil {
+				files = append(files, fNew...)
+			}
+		}
+		return nil
+	})
+	return files, err
 }
