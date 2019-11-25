@@ -16,7 +16,7 @@ type Table struct {
 	*mgo.Collection
 	Name   string
 	Prefix string
-	Length int	
+	Length int
 }
 
 func NewTable(name, prefix string, length int) *Table {
@@ -131,10 +131,10 @@ func (t *Table) UnsafeFindSort(queryMatch bson.M, fields string, result interfac
 	return err
 }
 
-func (t *Table) UnsafeFindSortOne(queryMatch bson.M, fields string, result interface{}) error {
-	var err = t.Find(queryMatch).Sort(fields).Limit(1).One(result)
+func (t *Table) UnsafeFindSortOne(queryMatch bson.M, fields []string, result interface{}) error {
+	var err = t.Find(queryMatch).Sort(fields...).Limit(1).One(result)
 	if err != nil {
-		logDB.Errorf("UnsafeFindSort "+err.Error()+" fields: "+fields, queryMatch)
+		logDB.Errorf("UnsafeFindSort "+err.Error()+" fields: ", queryMatch)
 	}
 	return err
 }

@@ -4,6 +4,7 @@ import (
 	"archive/zip"
 	"fmt"
 	"io"
+	"io/ioutil"
 	"os"
 	"path/filepath"
 	"strings"
@@ -254,4 +255,45 @@ func FilePathWalkDir(root string) ([]string, error) {
 		return nil
 	})
 	return files, err
+}
+
+func IOReadDirFile(root string) ([]string, error) {
+	var files []string
+	fileInfo, err := ioutil.ReadDir(root)
+	if err != nil {
+		return files, err
+	}
+	for _, file := range fileInfo {
+		var name = file.Name()
+		var fi, _ = os.Stat(filepath.Join(root, name))
+		if !fi.IsDir() {
+			files = append(files, name)
+		}
+	}
+	return files, nil
+}
+
+func IOReadDirAll(root string) ([]string, error) {
+	var files []string
+	fileInfo, err := ioutil.ReadDir(root)
+	if err != nil {
+		return files, err
+	}
+	for _, file := range fileInfo {
+		var name = file.Name()
+		files = append(files, name)
+	}
+	return files, nil
+}
+
+func ReadFile(fileName string) (string, error) {
+
+	var f, err = ioutil.ReadFile(fileName)
+	if err != nil {
+		return "", err
+	}
+
+	// Convert []byte to string and print to screen
+	text := string(f)
+	return text, nil
 }
