@@ -96,3 +96,16 @@ func RandNumStringUpper(length int) string {
 	}
 	return string(id)
 }
+
+func RandStringToUpper(length int) string {
+	// Create an array with the correct capacity
+	id := make([]byte, length)
+	// Fill our array with random numbers
+	rand.Read(id)
+
+	// Replace each random number with an alphanumeric value
+	for i, b := range id {
+		id[i] = idSourceUpper[b%idSourceUpperLen]
+	}
+	return string(id)
+}
