@@ -88,6 +88,19 @@ func CheckFileExist(filename string) bool {
 	return !info.IsDir()
 }
 
+func CheckFolderExist(pathRoot string) bool {
+	info, err := os.Stat(pathRoot)
+	if err != nil {
+		fmt.Println("ERROR START")
+		return false
+	}
+	if os.IsNotExist(err) {
+		fmt.Println("Not exist")
+		return false
+	}
+	return info.IsDir()
+}
+
 func CreateFolder(dir string) error {
 	if len(dir) == 0 {
 		return nil
@@ -246,23 +259,40 @@ func FilePathWalkDir(root string) ([]string, error) {
 	err := filepath.Walk(root, func(path string, info os.FileInfo, err error) error {
 		if !info.IsDir() {
 			files = append(files, path)
-		} else {
-			var fNew, err = FilePathWalkDir(path)
-			if err == nil {
-				files = append(files, fNew...)
-			}
 		}
 		return nil
 	})
 	return files, err
 }
 
+// func FilePathWalkDir(root string) ([]string, error) {
+// 	var files []string
+// 	err := filepath.Walk(root, func(path string, info os.FileInfo, err error) error {
+// 		if !info.IsDir() {
+// 			files = append(files, path)
+// 		} else {
+// 			var fNew, err = FilePathWalkDir(path)
+// 			if err == nil {
+// 				files = append(files, fNew...)
+// 			}
+// 		}
+// 		return nil
+// 	})
+// 	return files, err
+// }
+
 func IOReadDirFile(root string) ([]string, error) {
+	isCheck := CheckFolderExist(root)
+	if !isCheck {
+		fmt.Println("Not dir")
+	}
 	var files []string
+
 	fileInfo, err := ioutil.ReadDir(root)
 	if err != nil {
 		return files, err
 	}
+
 	for _, file := range fileInfo {
 		var name = file.Name()
 		var fi, _ = os.Stat(filepath.Join(root, name))
