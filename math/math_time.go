@@ -201,6 +201,29 @@ func CompareDayTime(dateTime1 time.Time, date2 int64) int {
 	return -1
 }
 
+func CompareDay(date1 int64, date2 int64) int {
+	var dateTime2 = time.Unix(date2, 0)
+	var dateTime1 = time.Unix(date1, 0)
+	var year1, month1, day1 = dateTime1.Date()
+	var year2, month2, day2 = dateTime2.Date()
+	if year1 == year2 && month1 == month2 && day1 == day2 {
+		return 0
+	}
+	return -1
+}
+
+func GetDayBeetwen(date1 int64, date2 int64) []time.Time {
+	var dateTime2 = time.Unix(date2, 0)
+	var dateTime1 = time.Unix(date1, 0)
+	var dRes = dateTime2.Sub(dateTime1) / (24 * time.Hour)
+	var noofdays = int(dRes)
+	var dates = make([]time.Time, 0)
+	for i := 0; i <= noofdays; i++ {
+		dates = append(dates, dateTime1.AddDate(0, 0, i))
+	}
+	return dates
+}
+
 func CompareWeekDay(date1 int64, date2 int64) (isCheck bool) {
 	var dateTime1 = time.Unix(date1, 0)
 	var dateTime2 = time.Unix(date2, 0)
