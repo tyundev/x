@@ -11,6 +11,7 @@ type ModelID interface {
 	BeforeCreate(prefix string, length int)
 	BeforeUpdate()
 	BeforeDelete()
+	GetID()
 }
 
 type BaseModelObj struct {
@@ -33,4 +34,9 @@ func (b *BaseModelObj) BeforeUpdate() {
 
 func (b *BaseModelObj) BeforeDelete() {
 	b.UpdatedAt = 0
+}
+
+func (b *BaseModelObj) GetID() string {
+	b.ID = b.OID.Hex()
+	return b.ID
 }
