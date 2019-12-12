@@ -8,9 +8,9 @@ import (
 )
 
 type ModelID interface {
-	BeforeCreate(prefix string, length int)
-	BeforeUpdate()
-	BeforeDelete()
+	BeforeCreateObj(prefix string, length int)
+	BeforeUpdateObj()
+	BeforeDeleteObj()
 	GetID()
 }
 
@@ -21,18 +21,18 @@ type BaseModelObj struct {
 	UpdatedAt int64         `json:"updated_at" bson:"updated_at,omitempty"`
 }
 
-func (b *BaseModelObj) BeforeCreate(prefix string, length int) {
+func (b *BaseModelObj) BeforeCreateObj(prefix string, length int) {
 	b.ID = math.RandString(prefix, length)
 	b.OID = bson.ObjectId(b.ID)
 	b.CreatedAt = time.Now().Unix()
 	b.UpdatedAt = time.Now().Unix()
 }
 
-func (b *BaseModelObj) BeforeUpdate() {
+func (b *BaseModelObj) BeforeUpdateObj() {
 	b.UpdatedAt = time.Now().Unix()
 }
 
-func (b *BaseModelObj) BeforeDelete() {
+func (b *BaseModelObj) BeforeDeleteObj() {
 	b.UpdatedAt = 0
 }
 

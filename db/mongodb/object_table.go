@@ -5,7 +5,7 @@ import (
 )
 
 func (t *Table) CreateObj(model ModelID) error {
-	model.BeforeCreate(t.Prefix, t.Length)
+	model.BeforeCreateObj(t.Prefix, t.Length)
 	var err = t.Insert(model)
 	if err != nil {
 		logDB.Errorf("Create "+err.Error(), model)
@@ -17,7 +17,7 @@ func (t *Table) CreateUniqueObj(query bson.M, model ModelID) error {
 	count, err := t.CountWhere(query)
 	if err == nil {
 		if count == 0 {
-			return t.Create(model)
+			return t.CreateObj(model)
 		}
 		logDB.Errorf("CreateUnique "+err.Error(), model)
 		return ERR_EXIST
@@ -58,7 +58,7 @@ func (t *Table) FindOneObj(query bson.M, result interface{}) error {
 	return err
 }
 func (t *Table) FindByIDObj(id string, result interface{}) error {
-	var err = t.FindId(id).One(result)
+	var err = t.FindId(bson.ObjectIdHex(id)).One(result)
 	if err != nil {
 		logDB.Errorf("FindByID "+err.Error(), id)
 	}
@@ -66,7 +66,7 @@ func (t *Table) FindByIDObj(id string, result interface{}) error {
 }
 
 func (t *Table) DeleteByIDObj(id string) error {
-	var err = t.UpdateId(id, bson.M{"$set": bson.M{"updated_at": 0}})
+	var err = t.UpdateId(bson.ObjectIdHex(id), bson.M{"$set": bson.M{"updated_at": 0}})
 	if err != nil {
 		logDB.Errorf("DeleteByID "+err.Error(), id)
 	}
@@ -74,8 +74,8 @@ func (t *Table) DeleteByIDObj(id string) error {
 }
 
 func (t *Table) UnsafeUpdateByIDObj(id string, model ModelID) error {
-	model.BeforeUpdate()
-	var err = t.UpdateId(id, bson.M{"$set": model})
+	model.BeforeUpdateObj()
+	var err = t.UpdateId(bson.ObjectIdHex(id), bson.M{"$set": model})
 	if err != nil {
 		logDB.Errorf("UnsafeUpdateByID "+err.Error()+" id: "+id, model)
 	}
@@ -83,7 +83,7 @@ func (t *Table) UnsafeUpdateByIDObj(id string, model ModelID) error {
 }
 
 func (t *Table) UpSetByIDObj(id string, data interface{}) error {
-	var err = t.UpdateId(id, bson.M{"$set": data})
+	var err = t.UpdateId(bson.ObjectIdHex(id), bson.M{"$set": data})
 	if err != nil {
 		logDB.Errorf("UpSetByID "+err.Error()+" id: "+id, data)
 	}
