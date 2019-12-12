@@ -32,13 +32,15 @@ func NewFCM(serverKey string) *FcmClient {
 	}
 }
 
-func (f *FcmClient) SendToMany(ids []string, data FmcMessage) (error, string) {
+func (f *FcmClient) SendToMany(ids []string, data FmcMessage, platform string) (error, string) {
 	var noti = fcm.NotificationPayload{
 		Title: data.Title,
 		Body:  data.Body,
 	}
 	f.NewFcmRegIdsMsg(ids, data)
-	f.SetNotificationPayload(&noti)
+	if platform != "android" {
+		f.SetNotificationPayload(&noti)
+	}
 	status, err := f.Send()
 	if err != nil {
 		logFCM.Debugln(0, err)
@@ -47,17 +49,20 @@ func (f *FcmClient) SendToMany(ids []string, data FmcMessage) (error, string) {
 	return nil, status.Err
 }
 
-func (f *FcmClient) SendToOne(id string, data FmcMessage) (error, string) {
-	return f.SendToMany([]string{id}, data)
+func (f *FcmClient) SendToOne(id string, data FmcMessage, platform string) (error, string) {
+	return f.SendToMany([]string{id}, data, platform)
 }
 
-func (f *FcmClient) SendToManyData(ids []string, data FcmMessageData) (error, string) {
-	var noti = fcm.NotificationPayload{
-		Title: data.Title,
-		Body:  data.Body,
-	}
+func (f *FcmClient) SendToManyData(ids []string, data FcmMessageData, platform string) (error, string) {
 	f.NewFcmRegIdsMsg(ids, data.Data)
-	f.SetNotificationPayload(&noti)
+
+	if platform != "android" {
+		var noti = fcm.NotificationPayload{
+			Title: data.Title,
+			Body:  data.Body,
+		}
+		f.SetNotificationPayload(&noti)
+	}
 	status, err := f.Send()
 	if err != nil {
 		logFCM.Debugln(0, err)
@@ -66,6 +71,7 @@ func (f *FcmClient) SendToManyData(ids []string, data FcmMessageData) (error, st
 	return nil, status.Err
 }
 
-func (f *FcmClient) SendToOneData(id string, data FcmMessageData) (error, string) {
-	return f.SendToManyData([]string{id}, data)
+
+func (f *FcmClient) SendToOneData(id string, data FcmMessageData, platform string) (error, string) {
+	return f.SendToManyData([]string{id}, data,platform)
 }
