@@ -11,7 +11,7 @@ type ModelID interface {
 	BeforeCreateObj(prefix string, length int)
 	BeforeUpdateObj()
 	BeforeDeleteObj()
-	GetID()
+	//GetID()
 }
 
 type BaseModelObj struct {
