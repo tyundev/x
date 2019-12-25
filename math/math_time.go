@@ -389,6 +389,7 @@ func GetDayCount(dateStart int64, dateEnd int64) (dayCount int, dateTime1 time.T
 	return
 }
 
+//start và end ngày theo time unix64
 func BeginAndEndDay(val int64) (start int64, end int64) {
 	var timeNow = time.Unix(val, 0).In(loc)
 	start = New(timeNow).BeginningOfDay().Unix()
@@ -396,6 +397,7 @@ func BeginAndEndDay(val int64) (start int64, end int64) {
 	return
 }
 
+// start và end trong ngày
 func BeginAndEndDayNow() (start int64, end int64) {
 	start = BeginningOfDay().Unix()
 	end = EndOfDay().Unix()
