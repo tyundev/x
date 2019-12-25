@@ -53,6 +53,21 @@ func BeginningOfYear() time.Time {
 	return New(time.Now()).BeginningOfYear()
 }
 
+// lấy đầu năm theo ngày
+func BeginningOfYearByTime(value int64) time.Time {
+	var timeValue = time.Unix(value, 0)
+	return New(timeValue).BeginningOfYear()
+}
+
+func EndOfYearByTime(value int64) time.Time {
+	var timeValue = time.Unix(value, 0)
+	return New(timeValue).EndOfYear()
+}
+
+func BeginEndYearByTime(value int64) (time.Time, time.Time) {
+	return BeginningOfYearByTime(value), EndOfYearByTime(value)
+}
+
 func EndOfMinute() time.Time {
 	return New(time.Now()).EndOfMinute()
 }
