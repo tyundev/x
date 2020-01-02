@@ -14,6 +14,7 @@ type BaseModel struct {
 	ID        string `json:"id" bson:"_id"`
 	CreatedAt int64  `json:"created_at" bson:"created_at,omitempty"`
 	UpdatedAt int64  `json:"updated_at" bson:"updated_at,omitempty"`
+	DeletedAt int64  `json:"deleted_at" bson:"deleted_at"`
 }
 
 func (b *BaseModel) BeforeCreate(prefix string, length int) {
@@ -27,5 +28,5 @@ func (b *BaseModel) BeforeUpdate() {
 }
 
 func (b *BaseModel) BeforeDelete() {
-	b.UpdatedAt = 0
+	b.DeletedAt = time.Now().Unix()
 }
