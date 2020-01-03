@@ -18,7 +18,9 @@ type BaseModel struct {
 }
 
 func (b *BaseModel) BeforeCreate(prefix string, length int) {
-	b.ID = math.RandString(prefix, length)
+	if b.ID == "" {
+		b.ID = math.RandString(prefix, length)
+	}
 	b.CreatedAt = time.Now().Unix()
 	b.UpdatedAt = time.Now().Unix()
 }
