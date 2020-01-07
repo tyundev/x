@@ -85,6 +85,20 @@ func (t *Table) FindByID(id string, result interface{}) error {
 	return err
 }
 
+func (t *Table) UpdateBulk(result map[string]interface{}) error {
+	var bulk = t.Bulk()
+	for key, val := range result {
+		var selector = bson.M{"_id": key}
+		var update = bson.M{"$set": val}
+		bulk.Update(selector, update)
+	}
+	_, err := bulk.Run()
+	if err != nil {
+		logDB.Errorf("UpdateArrayBoject " + err.Error())
+	}
+	return err
+}
+
 func (t *Table) DeleteByID(id string) error {
 	var err = t.UpdateId(id, bson.M{"$set": bson.M{"deleted_at": time.Now().Unix()}})
 	if err != nil {

@@ -118,6 +118,14 @@ func AssertNexNotFound(err error) bool {
 	return false
 }
 
+func AssertOkNotFound(err error) {
+	if err != nil && err.Error() == "not found" {
+		err = ErrorOK("no record")
+	} else if err != nil {
+		panic(err)
+	}
+}
+
 func IsNotFound(err error) bool {
 	if err != nil && err.Error() == "not found" {
 		return true
