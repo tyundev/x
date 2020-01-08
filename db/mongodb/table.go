@@ -133,11 +133,20 @@ func (t *Table) UpdateWhere(selector interface{}, data interface{}) error {
 	return err
 }
 
-func (t *Table) UnsafeFindSort(queryMatch bson.M, fields string, result interface{}) error {
+func (t *Table) UnsafeFindSort(queryMatch bson.M, fields []string, result interface{}) error {
 	queryMatch["deleted_at"] = 0
-	var err = t.Find(queryMatch).Sort(fields).All(result)
+	var err = t.Find(queryMatch).Sort(fields...).All(result)
 	if err != nil {
-		logDB.Errorf("UnsafeFindSort "+err.Error()+" fields: "+fields, queryMatch)
+		logDB.Errorf("UnsafeFindSort "+err.Error(), " fields: ", fields, queryMatch)
+	}
+	return err
+}
+
+func (t *Table) UnsafeFindSortSkip(queryMatch bson.M, fields []string, skip int, limit int, result interface{}) error {
+	queryMatch["deleted_at"] = 0
+	var err = t.Find(queryMatch).Sort(fields...).Skip(skip).Limit(limit).All(result)
+	if err != nil {
+		logDB.Errorf("UnsafeFindSort "+err.Error(), " fields: ", fields, queryMatch)
 	}
 	return err
 }
