@@ -73,6 +73,20 @@ func (t *Table) DeleteByIDObj(id string) error {
 	return err
 }
 
+func (t *Table) UpdateBulkObj(result map[string]interface{}) error {
+	var bulk = t.Bulk()
+	for key, val := range result {
+		var selector = bson.M{"_id": bson.ObjectIdHex(key)}
+		var update = bson.M{"$set": val}
+		bulk.Update(selector, update)
+	}
+	_, err := bulk.Run()
+	if err != nil {
+		logDB.Errorf("UpdateArrayBoject " + err.Error())
+	}
+	return err
+}
+
 func (t *Table) UnsafeUpdateByIDObj(id string, model ModelID) error {
 	model.BeforeUpdateObj()
 	var err = t.UpdateId(bson.ObjectIdHex(id), bson.M{"$set": model})
