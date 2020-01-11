@@ -159,3 +159,11 @@ func (t *Table) UnsafeFindSortOne(queryMatch bson.M, fields []string, result int
 	}
 	return err
 }
+
+func (t *Table) UnsafeCreateList(data []interface{}) error {
+	err := t.Insert(data...)
+	if err != nil {
+		logDB.Errorf("UnsafeCreateAll " + err.Error())
+	}
+	return nil
+}
