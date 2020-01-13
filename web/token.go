@@ -15,3 +15,11 @@ func GetToken(r *http.Request) string {
 	}
 	return r.URL.Query().Get(accessToken)
 }
+
+func GetTokenSocket(r http.Header) string {
+	var authHeader = r.Get("Authorization")
+	if strings.HasPrefix(authHeader, bearerHeader) {
+		return strings.TrimPrefix(authHeader, bearerHeader)
+	}
+	return ""
+}
