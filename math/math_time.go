@@ -383,6 +383,11 @@ var loc, _ = time.LoadLocation("Asia/Ho_Chi_Minh")
 func BeginningOfDayVN() time.Time {
 	return BeginningOfDay().In(loc)
 }
+
+func GetLocationVN() *time.Location {
+	return loc
+}
+
 func NewTimeVN() time.Time {
 	return new(time.Time).In(loc)
 }
