@@ -21,7 +21,9 @@ func (b *BaseModel) BeforeCreate(prefix string, length int) {
 	if b.ID == "" {
 		b.ID = math.RandString(prefix, length)
 	}
-	b.CreatedAt = time.Now().Unix()
+	if b.CreatedAt == 0 {
+		b.CreatedAt = time.Now().Unix()
+	}
 	b.UpdatedAt = time.Now().Unix()
 }
 

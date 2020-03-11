@@ -39,6 +39,19 @@ func (t *Table) Create(model IModel) error {
 	return err
 }
 
+func (t *Table) UnsafeUpSertID(id string, model IModel) error {
+	model.BeforeCreate(t.Prefix, t.Length)
+	return t.UpSert(id, model)
+}
+
+func (t *Table) UpSert(id string, data interface{}) error {
+	_, err := t.UpsertId(id, bson.M{"$set": data})
+	if err != nil {
+		logDB.Errorf("UpSert "+err.Error(), data)
+	}
+	return err
+}
+
 func (t *Table) CreateUnique(query bson.M, model IModel) error {
 	count, err := t.CountWhere(query)
 	if err == nil {
