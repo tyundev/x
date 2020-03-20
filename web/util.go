@@ -26,6 +26,18 @@ func MustGetInt64(key string, g IGetable) int64 {
 	return v
 }
 
+func MustGetBool(key string, g IGetable) bool {
+	var value = g.Get(key)
+	if len(value) > 0 {
+		var v, err = strconv.ParseBool(value)
+		if err != nil {
+			panic(rest.BadRequest(key + " must be int"))
+		}
+		return v
+	}
+	return false
+}
+
 func GetArrString(key string, sep string, g IGetable) []string {
 	var value = g.Get(key)
 	if len(value) < 1 {
