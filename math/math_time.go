@@ -216,6 +216,10 @@ func CompareDayTime(dateTime1 time.Time, date2 int64) int {
 	return -1
 }
 
+func GetTimeInt64(date int64) time.Time {
+	return time.Unix(date, 0)
+}
+
 func CompareDay(date1 int64, date2 int64) int {
 	var dateTime2 = time.Unix(date2, 0)
 	var dateTime1 = time.Unix(date1, 0)
