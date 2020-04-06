@@ -2,6 +2,7 @@ package web
 
 import (
 	"net/http"
+	"net/url"
 	"strings"
 )
 
@@ -16,10 +17,10 @@ func GetToken(r *http.Request) string {
 	return r.URL.Query().Get(accessToken)
 }
 
-func GetTokenSocket(r http.Header) string {
+func GetTokenSocket(r http.Header, requets url.URL) string {
 	var authHeader = r.Get("Authorization")
 	if strings.HasPrefix(authHeader, bearerHeader) {
 		return strings.TrimPrefix(authHeader, bearerHeader)
 	}
-	return ""
+	return requets.Query().Get(accessToken)
 }
