@@ -193,5 +193,14 @@ func (t *Table) UnsafeCreateList(data []interface{}) error {
 	if err != nil {
 		logDB.Errorf("UnsafeCreateAll " + err.Error())
 	}
-	return nil
+	return err
+}
+
+func (t *Table) UnsafeUpdateAll(filter bson.M, data interface{}) error {
+	filter["deleted_at"] = 0
+	_, err := t.UpdateAll(filter, bson.M{"$set": data})
+	if err != nil {
+		logDB.Errorf("UnsafeUpdateAll " + err.Error())
+	}
+	return err
 }
