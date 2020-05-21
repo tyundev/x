@@ -4,9 +4,10 @@ import (
 	"fmt"
 	"x/rest"
 
+	"time"
+
 	"gopkg.in/mgo.v2"
 	"gopkg.in/mgo.v2/bson"
-	"time"
 )
 
 const (
@@ -91,7 +92,8 @@ func (t *Table) FindOne(query bson.M, result interface{}) error {
 	return err
 }
 func (t *Table) FindByID(id string, result interface{}) error {
-	var err = t.FindId(id).One(result)
+	var err = t.FindOne(bson.M{"_id": id,
+		"deleted_at": 0}, result)
 	if err != nil {
 		logDB.Errorf("FindByID "+err.Error(), id)
 	}
