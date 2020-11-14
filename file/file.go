@@ -114,10 +114,17 @@ func CreateFolder(dir string) error {
 	return nil
 }
 
-func ReplaceSpecial(value string) string {
+func ReplaceSpecial(value, addValue string) string {
 	if strings.Contains(value, ".") {
 		var arrVal = strings.Split(value, ".")
-		value = slug.MakeLang(arrVal[0], "en") + "." + arrVal[1]
+		var lenArr = len(arrVal)
+		for i, val := range arrVal {
+			if i == lenArr-1 {
+				value += "_" + addValue + "." + val
+			} else {
+				value += slug.MakeLang(val, "en")
+			}
+		}
 	} else {
 		value = slug.MakeLang(value, "en")
 	}
