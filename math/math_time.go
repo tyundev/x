@@ -377,6 +377,11 @@ func ConvertTimeToString(timex int64) string {
 	return timeConvert.Format("02-01-2006")
 }
 
+func ConvertTimeToSecond(timex int64) string {
+	var timeConvert = time.Unix(timex, 0)
+	return timeConvert.Format("15:04:05")
+}
+
 func ConvertTimeToStringSecond(timex int64) string {
 	var timeConvert = time.Unix(timex, 0)
 	return timeConvert.Format("02-01-2006 15:04:05")
