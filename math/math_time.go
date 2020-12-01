@@ -387,6 +387,11 @@ func ConvertTimeToStringSecond(timex int64) string {
 	return timeConvert.Format("02-01-2006 15:04:05")
 }
 
+func ConvertNowToStringSecond() string {
+	var timeConvert = time.Now()
+	return timeConvert.Format("02-01-2006 15:04:05")
+}
+
 func HourMinute() float32 {
 	var timeNow = time.Now().In(loc)
 	return float32(timeNow.Hour()) + float32(timeNow.Minute())/60
