@@ -115,20 +115,21 @@ func CreateFolder(dir string) error {
 }
 
 func ReplaceSpecial(value, addValue string) string {
+	var dataStr string
 	if strings.Contains(value, ".") {
 		var arrVal = strings.Split(value, ".")
 		var lenArr = len(arrVal)
 		for i, val := range arrVal {
 			if i == lenArr-1 {
-				value += "_" + addValue + "." + val
+				dataStr += "_" + addValue + "." + val
 			} else {
-				value += slug.MakeLang(val, "en")
+				dataStr += slug.MakeLang(val, "en")
 			}
 		}
 	} else {
-		value = slug.MakeLang(value, "en")
+		dataStr = slug.MakeLang(value, "en")
 	}
-	return value
+	return dataStr
 }
 
 func ClearDir(dir string) error {

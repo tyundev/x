@@ -19,11 +19,15 @@ func ParseFloat64(key string, g IGetable) (float64, error) {
 }
 
 func MustGetInt64(key string, g IGetable) int64 {
-	var v, err = strconv.ParseInt(g.Get(key), 10, 64)
-	if err != nil {
-		panic(rest.BadRequest(key + " must be int"))
+	var value = g.Get(key)
+	if value != "" {
+		var v, err = strconv.ParseInt(value, 10, 64)
+		if err != nil {
+			panic(rest.BadRequest(key + " must be int"))
+		}
+		return v
 	}
-	return v
+	return 0
 }
 
 func MustGetBool(key string, g IGetable) bool {
