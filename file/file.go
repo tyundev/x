@@ -2,6 +2,7 @@ package file
 
 import (
 	"archive/zip"
+	"encoding/base64"
 	"fmt"
 	"io"
 	"io/ioutil"
@@ -235,6 +236,37 @@ func CopyFolder(source string, dest string) (err error) {
 	return err
 }
 
+func CopyFileToFolder(source, dest, fileName string) (err error) {
+	if !CheckFolderExist(dest) {
+		CreateFolder(dest)
+	}
+
+	sourcefile, err := os.Open(source)
+	if err != nil {
+		return err
+	}
+
+	defer sourcefile.Close()
+	dest += "/" + fileName
+	destfile, err := os.Create(dest)
+	if err != nil {
+		return err
+	}
+
+	defer destfile.Close()
+
+	_, err = io.Copy(destfile, sourcefile)
+	if err == nil {
+		sourceinfo, err := os.Stat(source)
+		if err != nil {
+			err = os.Chmod(dest, sourceinfo.Mode())
+		}
+
+	}
+
+	return
+}
+
 func CopyFile(source string, dest string) (err error) {
 	sourcefile, err := os.Open(source)
 	if err != nil {
@@ -334,4 +366,25 @@ func ReadFile(fileName string) (string, error) {
 	// Convert []byte to string and print to screen
 	text := string(f)
 	return text, nil
+}
+
+func SaveBase64ToImage(b64, pathSave string) error {
+	dec, err := base64.StdEncoding.DecodeString(b64)
+	if err != nil {
+		return err
+	}
+
+	f, err := os.Create(pathSave)
+	if err != nil {
+		return err
+	}
+	defer f.Close()
+
+	if _, err := f.Write(dec); err != nil {
+		return err
+	}
+	if err := f.Sync(); err != nil {
+		return err
+	}
+	return nil
 }

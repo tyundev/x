@@ -44,6 +44,7 @@ func MustGetBool(key string, g IGetable) bool {
 
 func GetArrString(key string, sep string, g IGetable) []string {
 	var value = g.Get(key)
+	value = strings.Trim(value, " ")
 	if len(value) < 1 {
 		return []string{}
 	}
