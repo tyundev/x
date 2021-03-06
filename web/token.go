@@ -24,3 +24,11 @@ func GetTokenSocket(r http.Header, requets url.URL) string {
 	}
 	return requets.Query().Get(accessToken)
 }
+
+func GetTokenPublic(r *http.Request) string {
+	var authHeader = r.Header.Get("public")
+	if strings.HasPrefix(authHeader, bearerHeader) {
+		return strings.TrimPrefix(authHeader, bearerHeader)
+	}
+	return ""
+}

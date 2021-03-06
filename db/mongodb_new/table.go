@@ -167,3 +167,8 @@ func (t *Table) Pipe(pipeline mongo.Pipeline, res interface{}) error {
 	err = cur.All(ctx, res)
 	return err
 }
+
+func (t *Table) Count(filter bson.M) (int64, error) {
+	ctx := context.Background()
+	return t.CountDocuments(ctx, filter)
+}
