@@ -27,10 +27,13 @@ func (inf *Infrastructure) ConnectMongo(ctx context.Context, uri, user, pass str
 	if ok {
 		return
 	}
-	var optionsClient = options.Client().ApplyURI(uri).SetAuth(options.Credential{
-		Username: user,
-		Password: pass,
-	})
+	var optionsClient = options.Client().ApplyURI(uri)
+	if user != "" && pass != "" {
+		optionsClient.SetAuth(options.Credential{
+			Username: user,
+			Password: pass,
+		})
+	}
 	client, err = mongo.NewClient(optionsClient)
 	if err != nil {
 		return

@@ -22,9 +22,7 @@ type BaseModel struct {
 
 func (b *BaseModel) BeforeCreate(prefix string) {
 	var timeNow = time.Now().Unix()
-	if b.ID == "" {
-		b.ID = math.RandID(prefix)
-	}
+	b.ID = math.RandID(prefix)
 	if b.CreatedAt == 0 {
 		b.CreatedAt = timeNow
 	}

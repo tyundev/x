@@ -45,7 +45,7 @@ func (t *Table) Update(id string, model IModel) error {
 func (t *Table) Delete(id string, model IModel) error {
 	ctx := context.Background()
 	model.BeforeDelete()
-	var _, err = t.UpdateOne(ctx, bson.M{"_id": id}, bson.M{"$set": model})
+	var _, err = t.UpdateOne(ctx, bson.M{"_id": id, "deleted_at": 0}, bson.M{"$set": model})
 	if err != nil {
 		logDB.Errorf("Delete table "+t.Name()+": "+err.Error(), model)
 	}
@@ -54,7 +54,10 @@ func (t *Table) Delete(id string, model IModel) error {
 
 func (t *Table) UnsafeUpdateByID(id string, v interface{}) error {
 	ctx := context.Background()
-	var _, err = t.UpdateOne(ctx, bson.M{"_id": id}, bson.M{"$set": v})
+	var _, err = t.UpdateOne(ctx,
+		bson.M{"deleted_at": 0,
+			"_id": id},
+		bson.M{"$set": v})
 	if err != nil {
 		logDB.Errorf("UnsafeUpdateByID table "+t.Name()+": "+err.Error(), v)
 	}
@@ -130,7 +133,7 @@ func (t *Table) SelectMany(filter bson.M, v interface{}) error {
 func (t *Table) UpdateAll(filter bson.M, update interface{}) error {
 	ctx := context.Background()
 	filter["deleted_at"] = 0
-	var _, err = t.UpdateMany(ctx, filter, update)
+	var _, err = t.UpdateMany(ctx, filter, bson.M{"$set": update})
 	if err != nil {
 		return err
 	}
