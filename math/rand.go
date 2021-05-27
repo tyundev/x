@@ -138,9 +138,9 @@ func RandStringQR(length int) string {
 	return fmt.Sprintf("%s", string(id))
 }
 
-func GenCodes(quantity, lenght int) []string {
+func GenCodes(quantity int64, lenght int) []string {
 	var res = make([]string, quantity)
-	for i := 0; i < quantity; i++ {
+	for i := 0; int64(i) < quantity; i++ {
 		var val = RandStringQR(lenght)
 		res[i] = val
 	}

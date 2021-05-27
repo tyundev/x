@@ -3,6 +3,7 @@ package mongodb_new
 import (
 	"context"
 	"fmt"
+	"time"
 
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
@@ -50,6 +51,21 @@ func (t *Table) Delete(id string, model IModel) error {
 		logDB.Errorf("Delete table "+t.Name()+": "+err.Error(), model)
 	}
 	return err
+}
+
+func (t *Table) SelectAndDelete(id string) error {
+	ctx := context.Background()
+	var timeNow = time.Now().Unix()
+	after := options.After
+	opts := &options.FindOneAndUpdateOptions{
+		ReturnDocument: &after,
+	}
+	var res = t.FindOneAndUpdate(ctx, bson.M{"_id": id, "deleted_at": 0},
+		bson.M{"$set": bson.M{"deleted_at": timeNow, "created_at": timeNow}}, opts)
+	if res.Err() != nil {
+		logDB.Errorf("Delete table " + t.Name() + ": " + res.Err().Error())
+	}
+	return res.Err()
 }
 
 func (t *Table) UnsafeUpdateByID(id string, v interface{}) error {
@@ -140,12 +156,16 @@ func (t *Table) UpdateAll(filter bson.M, update interface{}) error {
 	return err
 }
 
-func (t *Table) SelectAndSort(filter bson.M, sort interface{}, skip, limit int64, res interface{}) error {
+func (t *Table) SelectAndSort(filter bson.M, sortFields bson.M, skip, limit int64, res interface{}) error {
 	ctx := context.Background()
 	filter["deleted_at"] = 0
 	var opts = options.Find()
-	if sort != nil {
-		opts.SetSort(sort)
+	if sortFields != nil {
+		// sort := bson.M{}
+		// for key, val := range sortFields {
+		// 	sort = append(sort, bson.E{key: val})
+		// }
+		opts.SetSort(sortFields)
 	}
 	if skip > 0 {
 		opts.SetSkip(skip)
