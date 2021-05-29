@@ -2,9 +2,12 @@ package mongodb_new
 
 import (
 	"context"
+	"reflect"
 	"sync"
 	"time"
 
+	"go.mongodb.org/mongo-driver/bson"
+	"go.mongodb.org/mongo-driver/bson/bsontype"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
@@ -27,13 +30,17 @@ func (inf *Infrastructure) ConnectMongo(ctx context.Context, uri, user, pass str
 	if ok {
 		return
 	}
-	var optionsClient = options.Client().ApplyURI(uri)
+	rb := bson.NewRegistryBuilder()
+	rb.RegisterTypeMapEntry(bsontype.EmbeddedDocument, reflect.TypeOf(bson.M{}))
+	var optionsClient = options.Client().ApplyURI(uri).SetRegistry(rb.Build())
+
 	if user != "" && pass != "" {
 		optionsClient.SetAuth(options.Credential{
 			Username: user,
 			Password: pass,
 		})
 	}
+
 	client, err = mongo.NewClient(optionsClient)
 	if err != nil {
 		return
