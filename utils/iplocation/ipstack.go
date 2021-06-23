@@ -1,6 +1,7 @@
 package iplocation
 
 import (
+	"fmt"
 	"x/rest"
 	"x/web"
 )
@@ -68,15 +69,19 @@ type dataResponse struct {
 }
 
 func GetIPStack(ip string) (*IPStack, error) {
+	fmt.Println("Vào IP STACK")
 	var res *dataResponse
 	var url = URLIPStack + ip + "access_key=" + KeyIPStack
 	_, err := web.MethodGet(url, &res)
 	if err != nil {
 		return nil, err
 	}
+	fmt.Println("END IP STACK", res)
 	if !res.Success {
+		fmt.Println("Error: ", res)
 		return nil, rest.ErrorOK(res.Error.Info)
 	}
+
 	return res.IPStack, nil
 }
 

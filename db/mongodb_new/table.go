@@ -181,7 +181,7 @@ func (t *Table) SelectAndSort(filter bson.M, sortFields bson.M, skip, limit int6
 	return err
 }
 
-func (t *Table) Pipe(pipeline mongo.Pipeline, res interface{}) error {
+func (t *Table) Pipe(pipeline []bson.M, res interface{}) error {
 	ctx := context.Background()
 	var cur, err = t.Aggregate(ctx, pipeline)
 	if err != nil {
@@ -192,6 +192,7 @@ func (t *Table) Pipe(pipeline mongo.Pipeline, res interface{}) error {
 }
 
 func (t *Table) Count(filter bson.M) (int64, error) {
+	filter["deleted_at"] = 0
 	ctx := context.Background()
 	return t.CountDocuments(ctx, filter)
 }

@@ -2,6 +2,7 @@ package iplocation
 
 import (
 	"net/http"
+	"strconv"
 	"x/rest"
 	"x/web"
 )
@@ -36,7 +37,10 @@ func GetIPGeo(ip string) (*IPGeo, error) {
 		return nil, err
 	}
 	if code != http.StatusOK {
-		return nil, rest.ErrorOK(errGeo.Message)
+		if errGeo != nil {
+			return nil, rest.ErrorOK(errGeo.Message)
+		}
+		return nil, rest.ErrorOK(strconv.Itoa(code) + "Not response")
 	}
 	return res, nil
 }

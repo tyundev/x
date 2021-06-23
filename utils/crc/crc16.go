@@ -1,8 +1,6 @@
 package crc
 
 import (
-	"x/utils/md"
-
 	"github.com/sigurn/crc16"
 )
 
@@ -34,11 +32,12 @@ func GetCrc16(data string) int {
 
 func GetCheckSumReiway(data string) int64 {
 	data += Reiway
-	var md5, _ = md.Encrypt([]byte(data), PublicKeyQRCG)
-	if md5 == "" {
-		return 0
-	}
+	// var md5, _ = md.Encrypt([]byte(data), PublicKeyQRCG)
+	// if md5 == "" {
+	// 	return 0
+	// }
+	//data, _ = auth.GererateHashedPassword(data)
 	table := crc16.MakeTable(crc16.CRC16_X_25)
-	checkSum := crc16.Checksum([]byte(md5), table)
+	checkSum := crc16.Checksum([]byte(data), table)
 	return int64(checkSum)
 }
