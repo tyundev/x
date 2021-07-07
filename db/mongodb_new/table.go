@@ -46,7 +46,7 @@ func (t *Table) Update(id string, model IModel) error {
 func (t *Table) Delete(id string, model IModel) error {
 	ctx := context.Background()
 	model.BeforeDelete()
-	var _, err = t.UpdateOne(ctx, bson.M{"_id": id, "deleted_at": 0}, bson.M{"$set": model})
+	var _, err = t.UpdateOne(ctx, bson.M{"_id": id, "deleted_at": 0}, bson.M{"$set": bson.M{"deleted_at": time.Now().Unix()}})
 	if err != nil {
 		logDB.Errorf("Delete table "+t.Name()+": "+err.Error(), model)
 	}
