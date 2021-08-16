@@ -71,7 +71,7 @@ type dataResponse struct {
 func GetIPStack(ip string) (*IPStack, error) {
 	fmt.Println("Vào IP STACK")
 	var res *dataResponse
-	var url = URLIPStack + ip + "access_key=" + KeyIPStack
+	var url = URLIPStack + ip + "?access_key=" + KeyIPStack
 	_, err := web.MethodGet(url, &res)
 	if err != nil {
 		return nil, err
@@ -95,7 +95,7 @@ func GetIPStacks(ips []string) ([]*IPStack, error) {
 			ipAll += "," + val
 		}
 	}
-	var url = URLIPStack + ipAll + "access_key=" + KeyIPStack
+	var url = URLIPStack + ipAll + "?access_key=" + KeyIPStack
 	_, err := web.MethodGet(url, &res)
 	if err != nil {
 		return nil, err

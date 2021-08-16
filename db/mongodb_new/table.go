@@ -23,9 +23,30 @@ func NewTable(name, prefix string, db *mongo.Database) *Table {
 	}
 }
 
+func (t *Table) CreateIndexOne(mode mongo.IndexModel, opts ...*options.CreateIndexesOptions) error {
+	ctx := context.Background()
+	var _, err = t.Indexes().CreateOne(ctx, mode, opts...)
+	return err
+}
+
+func (t *Table) CreateIndexMany(mods []mongo.IndexModel, opts ...*options.CreateIndexesOptions) error {
+	ctx := context.Background()
+	var _, err = t.Indexes().CreateMany(ctx, mods, opts...)
+	return err
+}
+
 func (t *Table) Create(model IModel) error {
 	ctx := context.Background()
 	model.BeforeCreate(t.Prefix)
+	var _, err = t.InsertOne(ctx, model)
+	if err != nil {
+		logDB.Errorf("Create table "+t.Name()+": "+err.Error(), model)
+	}
+	return err
+}
+
+func (t *Table) CreateForce(model IModel) error {
+	ctx := context.Background()
 	var _, err = t.InsertOne(ctx, model)
 	if err != nil {
 		logDB.Errorf("Create table "+t.Name()+": "+err.Error(), model)
@@ -66,6 +87,27 @@ func (t *Table) SelectAndDelete(id string) error {
 		logDB.Errorf("Delete table " + t.Name() + ": " + res.Err().Error())
 	}
 	return res.Err()
+}
+
+func (t *Table) UnsafeUpdate(filter bson.M, v interface{}) error {
+	ctx := context.Background()
+	filter["deleted_at"] = 0
+	var _, err = t.UpdateOne(ctx, filter,
+		bson.M{"$set": v})
+	if err != nil {
+		logDB.Errorf("UnsafeUpdate table "+t.Name()+": "+err.Error(), v)
+	}
+	return err
+}
+
+func (t *Table) UpdateForce(filter bson.M, v interface{}) error {
+	ctx := context.Background()
+	filter["deleted_at"] = 0
+	var _, err = t.UpdateOne(ctx, filter, v)
+	if err != nil {
+		logDB.Errorf("UnsafeUpdate table "+t.Name()+": "+err.Error(), v)
+	}
+	return err
 }
 
 func (t *Table) UnsafeUpdateByID(id string, v interface{}) error {
@@ -144,6 +186,12 @@ func (t *Table) SelectMany(filter bson.M, v interface{}) error {
 	}
 	err = cur.All(ctx, v)
 	return err
+}
+
+func (t *Table) SelectDistinct(field string, filter bson.M) ([]interface{}, error) {
+	ctx := context.Background()
+	filter["deleted_at"] = 0
+	return t.Distinct(ctx, field, filter)
 }
 
 func (t *Table) UpdateAll(filter bson.M, update interface{}) error {

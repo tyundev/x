@@ -7,6 +7,7 @@ import (
 	"io"
 	"io/ioutil"
 	"os"
+	"path"
 	"path/filepath"
 	"strings"
 
@@ -115,6 +116,17 @@ func CreateFolder(dir string) error {
 	return nil
 }
 
+func RemoveSpecial(value string) string {
+	if strings.Contains(value, ".") {
+		var extension = path.Ext(value)
+		var name = value[0 : len(value)-len(extension)]
+		value = slug.MakeLang(name, "en") + extension
+	} else {
+		value = slug.MakeLang(value, "en")
+	}
+	return value
+}
+
 func ReplaceSpecial(value, addValue string) string {
 	var dataStr string
 	if strings.Contains(value, ".") {
@@ -145,6 +157,10 @@ func ClearDir(dir string) error {
 		}
 	}
 	return nil
+}
+
+func RenameFile(pathOld, pathNew string) error {
+	return os.Rename(pathOld, pathNew)
 }
 
 // ZipFiles compresses one or many files into a single zip archive file.

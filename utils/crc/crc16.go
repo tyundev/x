@@ -1,6 +1,8 @@
 package crc
 
 import (
+	"x/utils/md"
+
 	"github.com/sigurn/crc16"
 )
 
@@ -8,6 +10,28 @@ const (
 	Reiway        = "Reiway@23031993@18021995"
 	PublicKeyQRCG = "9e52c703ba0579a31a8461d27634e5d4" //yeuthuongvanvat@kientrichamchithattam
 )
+
+func CheckCmd(allNum, cmd, addr, numData string) (bool, isSetup bool) {
+	if allNum != AllNumByte_Setup && allNum != AllNumByte_Status {
+		return false, isSetup
+	}
+	if cmd != CMD_Setup && cmd != CMD_Status {
+		return false, isSetup
+	}
+	if addr != ADDR_Setup && addr != ADDR_Status {
+		return false, isSetup
+	}
+	if numData != NumDATA_Setup && numData != NumDATA_Status {
+		return false, isSetup
+	}
+	switch cmd {
+	case CMD_Setup:
+		isSetup = true
+	default:
+		isSetup = false
+	}
+	return true, isSetup
+}
 
 func GetCrc16(data string) int {
 	var datac = []rune(data)
@@ -32,10 +56,10 @@ func GetCrc16(data string) int {
 
 func GetCheckSumReiway(data string) int64 {
 	data += Reiway
-	// var md5, _ = md.Encrypt([]byte(data), PublicKeyQRCG)
-	// if md5 == "" {
-	// 	return 0
-	// }
+	var md5, _ = md.Encrypt([]byte(data), PublicKeyQRCG)
+	if md5 == "" {
+		return 0
+	}
 	//data, _ = auth.GererateHashedPassword(data)
 	table := crc16.MakeTable(crc16.CRC16_X_25)
 	checkSum := crc16.Checksum([]byte(data), table)

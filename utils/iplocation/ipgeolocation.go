@@ -1,6 +1,7 @@
 package iplocation
 
 import (
+	"fmt"
 	"net/http"
 	"strconv"
 	"x/rest"
@@ -31,7 +32,8 @@ type errorGeo struct {
 func GetIPGeo(ip string) (*IPGeo, error) {
 	var res *IPGeo
 	var errGeo *errorGeo
-	var url = URLIPGeo + KeyIPGeo + "ip=" + ip
+	var url = URLIPGeo + KeyIPGeo + "&ip=" + ip
+	fmt.Println(url)
 	code, err := web.MethodGetNew(url, &res, &errGeo)
 	if err != nil {
 		return nil, err
