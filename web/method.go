@@ -4,9 +4,14 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
+	"io"
+	"mime/multipart"
 	"net/http"
+	"os"
+	"strings"
 	"time"
 	"x/mlog"
+	"x/rest"
 )
 
 var logMarshal = mlog.NewTagLog("rest_cetm")
@@ -93,4 +98,86 @@ func MethodGetNew(url string, objRes interface{}, objErr interface{}) (statusCod
 	err = json.NewDecoder(resp.Body).Decode(&objRes)
 	fmt.Println("==== ĐẾN ĐÂY", objRes)
 	return resp.StatusCode, err
+}
+
+func PostFormRequest(url string, header, params, paramFiles map[string]string, res interface{}) (int, error) {
+	client := &http.Client{
+		Timeout: 20 * time.Second,
+	}
+
+	//prepare the reader instances to encode
+	values := map[string]io.Reader{}
+	for key, val := range paramFiles {
+		values[key] = mustOpen(val)
+	}
+	for key, val := range params {
+		values[key] = strings.NewReader(val)
+	}
+	//res, err := PostFileResty(paramFiles,params)
+	code, err := Upload(client, url, header, values, &res)
+	return code, err
+}
+
+func Upload(client *http.Client, url string, header map[string]string, values map[string]io.Reader, objRes interface{}) (statusCode int, err error) {
+	// Prepare a form that you will submit to that URL.
+	var b bytes.Buffer
+	w := multipart.NewWriter(&b)
+	for key, r := range values {
+		var fw io.Writer
+		if x, ok := r.(io.Closer); ok {
+			defer x.Close()
+		}
+
+		// Add an image file
+		if x, ok := r.(*os.File); ok {
+			if fw, err = w.CreateFormFile(key, x.Name()); err != nil {
+				return
+			}
+
+		} else {
+			// Add other fields
+			if fw, err = w.CreateFormField(key); err != nil {
+				return
+			}
+		}
+		if _, err = io.Copy(fw, r); err != nil {
+			return 500, err
+		}
+
+	}
+	// Don't forget to close the multipart writer.
+	// If you don't close it, your request will be missing the terminating boundary.
+	w.Close()
+
+	// Now that you have a form, you can submit it to your handler.
+	req, err := http.NewRequest("POST", url, &b)
+	if err != nil {
+		return
+	}
+	// Don't forget to set the content type, this will contain the boundary.
+	req.Header.Set("Content-Type", w.FormDataContentType())
+	for key, val := range header {
+		fmt.Println(key, val)
+		req.Header.Set(key, val)
+	}
+
+	// Submit the request
+	res, err := client.Do(req)
+	fmt.Println(err, res)
+	if err != nil {
+		return
+	}
+	defer res.Body.Close()
+	return res.StatusCode, json.NewDecoder(res.Body).Decode(&objRes)
+}
+
+func mustOpen(f string) *os.File {
+	if _, err := os.Stat(f); os.IsNotExist(err) {
+		panic(rest.BadRequest("file: " + f + " not exist"))
+	}
+	r, err := os.Open(f)
+	if err != nil {
+		panic(err)
+	}
+	return r
 }
