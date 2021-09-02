@@ -9,11 +9,11 @@ import (
 )
 
 const (
-	KeySendGrid = "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"
+	KeySendGrid = ""
 )
 
 func TestGrid(subject, body, mailRecive string) error {
-	from := mail.NewEmail("TEST", "longtm@miraway.vn")
+	from := mail.NewEmail("TEST", "")
 	to := mail.NewEmail("recive", mailRecive)
 	plainTextContent := "test grid"
 	message := mail.NewSingleEmail(from, subject, to, plainTextContent, body)
@@ -25,7 +25,7 @@ func TestGrid(subject, body, mailRecive string) error {
 func SendMany(mails []string) {
 	m := mail.NewV3Mail()
 
-	from := mail.NewEmail("test", "longtm@miraway.vn")
+	from := mail.NewEmail("test", "")
 	content := mail.NewContent("text/html", "<p> %fname% : %CustomerID% - Personalizations are awesome!</p>")
 
 	m.SetFrom(from)
