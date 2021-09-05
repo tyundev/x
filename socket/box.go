@@ -1,7 +1,7 @@
 package socket
 
 import (
-	"x/mlog"
+	"github.com/reiwav/x/mlog"
 )
 
 // Box handles ws request

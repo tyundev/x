@@ -3,8 +3,8 @@ package mongodb_new
 import (
 	"time"
 
-	"x/math"
-	"x/mlog"
+	"github.com/reiwav/x/math"
+	"github.com/reiwav/x/mlog"
 )
 
 var logDB = mlog.NewTagLog("MONGO_DB")

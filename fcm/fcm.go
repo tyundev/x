@@ -1,7 +1,7 @@
 package fcm
 
 import (
-	"x/mlog"
+	"github.com/reiwav/x/mlog"
 
 	fcm "github.com/NaySoftware/go-fcm"
 )

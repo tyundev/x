@@ -3,7 +3,7 @@ package mongodb
 import (
 	"time"
 
-	"x/math"
+	"github.com/reiwav/x/math"
 
 	"gopkg.in/mgo.v2/bson"
 )

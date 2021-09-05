@@ -5,8 +5,8 @@ import (
 	"net/http"
 	"strconv"
 
-	"x/rest"
-	"x/web"
+	"github.com/reiwav/x/rest"
+	"github.com/reiwav/x/web"
 )
 
 const (

@@ -1,7 +1,7 @@
 package mongodb
 
 import (
-	"x/mlog"
+	"github.com/reiwav/x/mlog"
 
 	"gopkg.in/mgo.v2"
 )
