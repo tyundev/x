@@ -4,7 +4,8 @@ import (
 	"fmt"
 	"math/big"
 	"strconv"
-	"x/rest"
+
+	"github.com/reiwav/x/rest"
 )
 
 const (

@@ -2,7 +2,8 @@ package rest
 
 import (
 	"runtime/debug"
-	"x/rest/validator"
+
+	//"github.com/reiwav/x/rest/validator"
 
 	"github.com/gin-gonic/gin"
 	"github.com/golang/glog"
@@ -60,7 +61,7 @@ func (r *JsonRender) SendError(ctx *gin.Context, err error) {
 
 func (r *JsonRender) DecodeBody(ctx *gin.Context, data interface{}) {
 	AssertNil(BadRequest(ctx.BindJSON(&data).Error()))
-	AssertNil(BadRequest(validator.Validate(data).Error()))
+	//AssertNil(BadRequest(validator.Validate(data).Error()))
 
 }
 func (r *JsonRender) Success(ctx *gin.Context) {

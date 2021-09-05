@@ -10,8 +10,9 @@ import (
 	"os"
 	"strings"
 	"time"
-	"x/mlog"
-	"x/rest"
+
+	"github.com/reiwav/x/mlog"
+	"github.com/reiwav/x/rest"
 )
 
 var logMarshal = mlog.NewTagLog("rest_cetm")

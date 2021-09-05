@@ -2,7 +2,8 @@ package socket
 
 import (
 	"time"
-	"x/utils/timer"
+
+	"github.com/reiwav/x/utils/timer"
 )
 
 const aliveUri = "/__alive"

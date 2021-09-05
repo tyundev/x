@@ -3,7 +3,8 @@ package web
 import (
 	"strconv"
 	"strings"
-	"x/rest"
+
+	"github.com/reiwav/x/rest"
 )
 
 type IGetable interface {

@@ -1,7 +1,7 @@
 package crc
 
 import (
-	"x/utils/md"
+	"github.com/reiwav/x/utils/md"
 
 	"github.com/sigurn/crc16"
 )

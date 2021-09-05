@@ -1,7 +1,7 @@
 package fcm
 
 import (
-	"x/mlog"
+	"github.com/reiwav/x/mlog"
 
 	fcm "github.com/NaySoftware/go-fcm"
 )
@@ -71,7 +71,6 @@ func (f *FcmClient) SendToManyData(ids []string, data FcmMessageData, platform s
 	return nil, status.Err
 }
 
-
 func (f *FcmClient) SendToOneData(id string, data FcmMessageData, platform string) (error, string) {
-	return f.SendToManyData([]string{id}, data,platform)
+	return f.SendToManyData([]string{id}, data, platform)
 }
