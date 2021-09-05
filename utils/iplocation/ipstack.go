@@ -3,8 +3,8 @@ package iplocation
 import (
 	"fmt"
 
-	"github.com/reiwav/x/rest"
-	"github.com/reiwav/x/web"
+	"x/rest"
+	"x/web"
 )
 
 const (

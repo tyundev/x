@@ -3,7 +3,7 @@ package mongodb
 import (
 	"fmt"
 
-	"github.com/reiwav/x/rest"
+	"x/rest"
 
 	"time"
 

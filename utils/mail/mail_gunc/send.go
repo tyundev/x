@@ -1,9 +1,8 @@
 package mail_gunc
 
 import (
-	"context"
+
 	//"fmt"
-	"time"
 
 	mailgun "github.com/mailgun/mailgun-go"
 )
@@ -24,9 +23,9 @@ func SendMailGunc(subject, body, mailRecive string) error {
 	message := mg.NewMessage(sender, subject, body, "longtm23@gmail.com")
 	//message.SetTemplate("passwordReset")
 	//message.AddTemplateVariable("passwordResetLink", "some link to your site unique to your user")
-	ctx, cancel := context.WithTimeout(context.Background(), time.Second*30)
-	defer cancel()
+	// ctx, cancel := context.WithTimeout(context.Background(), time.Second*30)
+	// defer cancel()
 	// Send the message	with a 10 second timeout
-	_, _, err := mg.Send(ctx, message)
+	_, _, err := mg.Send(message)
 	return err
 }

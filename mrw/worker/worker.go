@@ -3,7 +3,7 @@ package worker
 import (
 	"time"
 
-	"github.com/reiwav/x/mlog"
+	"x/mlog"
 )
 
 var logger = mlog.NewTagLog("worker")

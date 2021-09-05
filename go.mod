@@ -13,7 +13,6 @@ require (
 	github.com/gosimple/slug v1.10.0
 	github.com/hyperboloide/lk v0.0.0-20200504060759-b535f1973118
 	github.com/mailgun/mailgun-go v2.0.0+incompatible
-	github.com/reiwav/x v0.0.0-20210902165127-11b45cf9af53
 	github.com/rs/xid v1.3.0
 	github.com/sendgrid/sendgrid-go v3.10.0+incompatible
 	github.com/sigurn/crc16 v0.0.0-20160107003519-da416fad5162

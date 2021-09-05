@@ -1,7 +1,7 @@
 package socket
 
 import (
-	"cetm/qapi-basic/x/mlog"
+	"x/mlog"
 )
 
 // Box handles ws request

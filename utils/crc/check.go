@@ -5,7 +5,7 @@ import (
 	"math/big"
 	"strconv"
 
-	"github.com/reiwav/x/rest"
+	"x/rest"
 )
 
 const (
