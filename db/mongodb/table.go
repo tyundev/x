@@ -181,6 +181,14 @@ func (t *Table) UnsafeFindSortSkip(queryMatch bson.M, fields []string, skip int,
 	}
 	return err
 }
+func (t *Table) UnsafeFindSkip(queryMatch bson.M, skip int, limit int, result interface{}) error {
+	queryMatch["deleted_at"] = 0
+	var err = t.Find(queryMatch).Skip(skip).Limit(limit).All(result)
+	if err != nil {
+		logDB.Errorf("UnsafeFindSort "+err.Error(), " fields: ", fields, queryMatch)
+	}
+	return err
+}
 
 func (t *Table) UnsafeFindSortOne(queryMatch bson.M, fields []string, result interface{}) error {
 	queryMatch["deleted_at"] = 0
