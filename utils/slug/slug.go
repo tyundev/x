@@ -32,7 +32,7 @@ var (
 	// Default is true.
 	Lowercase = false
 
-	regexpNonAuthorizedChars = regexp.MustCompile("[^a-zA-Z0-9-_?!/|:><=,.[]{}]")
+	regexpNonAuthorizedChars = regexp.MustCompile("[^a-zA-Z0-9-_?!/|:><=,.;[]{}]")
 	regexpMultipleDashes     = regexp.MustCompile("-+")
 )
 
