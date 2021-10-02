@@ -31,11 +31,17 @@ type ClientEmail struct {
 
 var client *ClientEmail
 
-func GetClient() *ClientEmail {
-	return client
+func GetClient(apiKey string) (*ClientEmail, error) {
+	if client == nil {
+		err := initClient(apiKey)
+		if err != nil {
+			return nil, err
+		}
+	}
+	return client, nil
 }
 
-func InitClient(apiKey string) error {
+func initClient(apiKey string) error {
 	var ctx context.Context
 
 	cfg := sendinblue.NewConfiguration()
