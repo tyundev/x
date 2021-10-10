@@ -6,7 +6,6 @@ import (
 	"sync"
 
 	"github.com/antihax/optional"
-	"github.com/gin-gonic/gin"
 	sendinblue "github.com/sendinblue/APIv3-go-library/lib"
 )
 
@@ -59,9 +58,10 @@ func initClient(apiKey string) error {
 	return nil
 }
 
-func GetList(ctx *gin.Context, limit, offset int64) (interface{}, error) {
+func GetList(limit, offset int64) (interface{}, error) {
 	client.m.Lock()
 	defer client.m.Unlock()
+	var ctx = context.Background()
 	var tps, _, err = client.Client.TransactionalEmailsApi.GetSmtpTemplates(ctx, &sendinblue.TransactionalEmailsApiGetSmtpTemplatesOpts{
 		Limit:  optional.NewInt64(limit),
 		Offset: optional.NewInt64(offset),
@@ -72,10 +72,10 @@ func GetList(ctx *gin.Context, limit, offset int64) (interface{}, error) {
 	return tps, err
 }
 
-func SendEmail(ctx *gin.Context, pr *RequestParam) (interface{}, error) {
+func SendEmail(pr *RequestParam) (interface{}, error) {
 	client.m.Lock()
 	defer client.m.Unlock()
-
+	var ctx = context.Background()
 	// var tps, _, err = client.Client.TransactionalEmailsApi.GetSmtpTemplate(ctx, pr.TemplateID)
 	// if err != nil {
 	// 	return nil, err
