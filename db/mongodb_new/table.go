@@ -74,13 +74,13 @@ func (t *Table) Delete(id string, model IModel) error {
 	return err
 }
 
-func (t *Table) DeleteByID(id string) error {
-	var err = t.UpdateId(id, bson.M{"$set": bson.M{"deleted_at": time.Now().Unix()}})
-	if err != nil {
-		logDB.Errorf("DeleteByID "+err.Error(), id)
-	}
-	return err
-}
+//	func (t *Table) DeleteByID(id string) error {
+//		var err = t.UpdateId(id, bson.M{"$set": bson.M{"deleted_at": time.Now().Unix()}})
+//		if err != nil {
+//			logDB.Errorf("DeleteByID "+err.Error(), id)
+//		}
+//		return err
+//	}
 func (t *Table) SelectAndDelete(id string) error {
 	ctx := context.Background()
 	var timeNow = time.Now().Unix()
@@ -211,7 +211,7 @@ func (t *Table) UpdateAll(filter bson.M, update interface{}) error {
 	return err
 }
 
-func (t *Table) SelectAndSort(filter bson.M, sortFields bson.M, skip, limit int64, res interface{}) error {
+func (t *Table) SelectAndSort(filter bson.M, sortFields bson.D, skip, limit int64, res interface{}) error {
 	ctx := context.Background()
 	filter["deleted_at"] = 0
 	var opts = options.Find()
