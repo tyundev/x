@@ -68,3 +68,20 @@ func GetArrInt(key string, sep string, g IGetable) ([]int, error) {
 	}
 	return resArr, nil
 }
+
+func GetArrInt64(key string, sep string, g IGetable) ([]int64, error) {
+	var value = g.Get(key)
+	if len(value) < 1 {
+		return []int64{}, rest.BadRequest(key + " must be int")
+	}
+	var resArr = []int64{}
+	var valArr = strings.Split(value, sep)
+	for _, val := range valArr {
+		valRes, err := strconv.ParseInt(val, 10, 64)
+		if err != nil {
+			return resArr, rest.BadRequest(key + " must be int")
+		}
+		resArr = append(resArr, valRes)
+	}
+	return resArr, nil
+}
