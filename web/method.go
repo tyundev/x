@@ -11,24 +11,28 @@ import (
 	"strings"
 	"time"
 
-	"github.com/tyundev/x/mlog"
-	"github.com/tyundev/x/rest"
+	"github.com/reiwav/x/mlog"
+	"github.com/reiwav/x/rest"
 )
 
 var logMarshal = mlog.NewTagLog("rest_cetm")
 
-func ResParamArrUrlClient(url string, objArray interface{}, objRes interface{}) error {
-	result, err := json.Marshal(objArray)
-	req, err := http.NewRequest("POST", url, bytes.NewBuffer(result))
+func ResParamArrUrlClient(url string, objArray interface{}, objRes interface{}) (int, error) {
+	result, _ := json.Marshal(objArray)
+	req, _ := http.NewRequest("POST", url, bytes.NewBuffer(result))
 	req.Header.Set("Content-Type", "application/json")
 	client := &http.Client{}
 	resp, err := client.Do(req)
+	statusCode := 500
+	if resp != nil {
+		statusCode = resp.StatusCode
+	}
 	if err != nil {
 		logMarshal.Errorf(url, "error marshal post")
-		return err
+		return statusCode, err
 	}
 	defer resp.Body.Close()
-	return json.NewDecoder(resp.Body).Decode(&objRes)
+	return statusCode, json.NewDecoder(resp.Body).Decode(&objRes)
 }
 
 func GetRequestHeader(url string, header map[string][]string, objRes interface{}) (error, int) {

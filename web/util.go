@@ -4,7 +4,7 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/tyundev/x/rest"
+	"github.com/reiwav/x/rest"
 )
 
 type IGetable interface {
@@ -77,11 +77,11 @@ func GetArrInt64(key string, sep string, g IGetable) ([]int64, error) {
 	var resArr = []int64{}
 	var valArr = strings.Split(value, sep)
 	for _, val := range valArr {
-		valRes, err := strconv.ParseInt(val, 10, 64)
+		var valRes, err = strconv.ParseInt(val, 10, 64)
 		if err != nil {
 			return resArr, rest.BadRequest(key + " must be int")
 		}
-		resArr = append(resArr, valRes)
+		resArr = append(resArr, int64(valRes))
 	}
 	return resArr, nil
 }

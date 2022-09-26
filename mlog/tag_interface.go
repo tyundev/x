@@ -2,7 +2,7 @@ package mlog
 
 var SolutionDir string
 
-//IMLog : Log interface
+// IMLog : Log interface
 type IMLog interface {
 	//Info Group
 	Debugf(level int, format string, args ...interface{})

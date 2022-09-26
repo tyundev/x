@@ -35,8 +35,27 @@ func (t *Table) CreateIndexMany(mods []mongo.IndexModel, opts ...*options.Create
 	return err
 }
 
+func (c *Table) GetBySlug(slug string, v interface{}) error {
+	return c.SelectOne(bson.M{
+		"slug": slug,
+	}, v)
+}
+
+func (c *Table) GetBySlugs(slugs []string, v interface{}) error {
+	return c.SelectMany(bson.M{
+		"slug": bson.M{
+			"$in": slugs},
+	}, v)
+}
+
 func (t *Table) Create(model IModel) error {
 	ctx := context.Background()
+	var slug = model.GetSlug()
+	var data interface{}
+	t.SelectOne(bson.M{"slug": slug}, data)
+	if data != nil {
+		return fmt.Errorf("slug exist")
+	}
 	model.BeforeCreate(t.Prefix)
 	var _, err = t.InsertOne(ctx, model)
 	if err != nil {
@@ -74,13 +93,6 @@ func (t *Table) Delete(id string, model IModel) error {
 	return err
 }
 
-//	func (t *Table) DeleteByID(id string) error {
-//		var err = t.UpdateId(id, bson.M{"$set": bson.M{"deleted_at": time.Now().Unix()}})
-//		if err != nil {
-//			logDB.Errorf("DeleteByID "+err.Error(), id)
-//		}
-//		return err
-//	}
 func (t *Table) SelectAndDelete(id string) error {
 	ctx := context.Background()
 	var timeNow = time.Now().Unix()

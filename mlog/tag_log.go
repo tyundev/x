@@ -2,10 +2,11 @@ package mlog
 
 import (
 	"fmt"
-	"github.com/golang/glog"
 	"runtime"
 	"runtime/debug"
 	"strings"
+
+	"github.com/golang/glog"
 )
 
 type tagLog struct {
@@ -14,7 +15,7 @@ type tagLog struct {
 	Debug       bool
 }
 
-//NewTagLog : Create new tag log
+// NewTagLog : Create new tag log
 func NewTagLog(tag string) IMLog {
 	if IsSkip(tag) {
 		return NoLog
@@ -25,7 +26,7 @@ func NewTagLog(tag string) IMLog {
 	}
 }
 
-//------------------------------	Util	---------------------------->
+// ------------------------------	Util	---------------------------->
 func (t *tagLog) splitFilePath(path *string) {
 	index := strings.Index(*path, t.ProjectPath)
 	if index != -1 {
@@ -40,7 +41,7 @@ func (t *tagLog) splitFuncPath(path *string) {
 	}
 }
 
-//------------------------------	INFO	---------------------------->
+// ------------------------------	INFO	---------------------------->
 func (t *tagLog) Debugf(level int, format string, args ...interface{}) {
 	if t.Debug {
 		format = t.Tag + "  " + format
@@ -61,7 +62,7 @@ func (t *tagLog) EnableDebug() IMLog {
 	return t
 }
 
-//------------------------------	INFO	---------------------------->
+// ------------------------------	INFO	---------------------------->
 func (t *tagLog) Infof(level int, format string, args ...interface{}) {
 	format = t.Tag + "  " + format
 	format = fmt.Sprintf(format, args...)

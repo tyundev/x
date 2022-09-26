@@ -392,10 +392,6 @@ func ConvertNowToStringSecond() string {
 	return timeConvert.Format("02-01-2006 15:04:05")
 }
 
-func GetTimeByInt64(timex int64) time.Time {
-	return time.Unix(timex, 0)
-}
-
 func HourMinute() float32 {
 	var timeNow = time.Now().In(loc)
 	return float32(timeNow.Hour()) + float32(timeNow.Minute())/60
@@ -432,12 +428,18 @@ func GetDayCount(dateStart int64, dateEnd int64) (dayCount int, dateTime1 time.T
 	return
 }
 
-//start và end ngày theo time unix64
+// start và end ngày theo time unix64
 func BeginAndEndDay(val int64) (start int64, end int64) {
 	var timeNow = time.Unix(val, 0).In(loc)
 	start = New(timeNow).BeginningOfDay().Unix()
 	end = New(timeNow).EndOfDay().Unix()
 	return
+}
+
+func BeginEndDayByTime(t time.Time) (time.Time, time.Time) {
+	start := New(t).BeginningOfDay()
+	end := New(t).EndOfDay()
+	return start, end
 }
 
 // start và end trong ngày
@@ -459,7 +461,7 @@ func TimeToString(val int64) string {
 	return strconv.Itoa(timeNow.Hour()) + ":" + minuteStr
 }
 
-//tinh chenh lech so ngay thang nam
+// tinh chenh lech so ngay thang nam
 func Diff(a, b time.Time) (year, month, day, hour, min, sec int) {
 	if a.Location() != b.Location() {
 		b = b.In(a.Location())

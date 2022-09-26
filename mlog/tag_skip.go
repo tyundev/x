@@ -6,12 +6,12 @@ import (
 
 var skips = map[string]bool{}
 
-//IsSkip : Check tag is skip
+// IsSkip : Check tag is skip
 func IsSkip(tag string) bool {
 	return skips[safeTagName(tag)]
 }
 
-//SkipTag : skip
+// SkipTag : skip
 func SkipTag(tag string) {
 	skips[safeTagName(tag)] = true
 }

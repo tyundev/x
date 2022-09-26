@@ -1,12 +1,12 @@
 package mlog
 
-//NoLog :
+// NoLog :
 var NoLog = &noneLog{}
 
 type noneLog struct {
 }
 
-//------------------------------	INFO	---------------------------->
+// ------------------------------	INFO	---------------------------->
 func (n *noneLog) Debugf(level int, format string, args ...interface{}) {
 }
 
@@ -14,7 +14,7 @@ func (n *noneLog) Debugln(level int, args ...interface{}) {
 
 }
 
-//------------------------------	INFO	---------------------------->
+// ------------------------------	INFO	---------------------------->
 func (n *noneLog) Infof(level int, format string, args ...interface{}) {
 }
 
@@ -22,7 +22,7 @@ func (n *noneLog) Infoln(level int, args ...interface{}) {
 
 }
 
-//------------------------------	ERROR	---------------------------->
+// ------------------------------	ERROR	---------------------------->
 func (n *noneLog) Error(args ...interface{}) {
 
 }
