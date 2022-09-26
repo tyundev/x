@@ -4,7 +4,7 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/reiwav/x/rest"
+	"github.com/tyundev/x/rest"
 )
 
 type IGetable interface {

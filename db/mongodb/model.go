@@ -3,7 +3,7 @@ package mongodb
 import (
 	"time"
 
-	"github.com/reiwav/x/math"
+	"github.com/tyundev/x/math"
 )
 
 type IModel interface {

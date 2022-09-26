@@ -11,8 +11,8 @@ import (
 	"strings"
 	"time"
 
-	"github.com/reiwav/x/mlog"
-	"github.com/reiwav/x/rest"
+	"github.com/tyundev/x/mlog"
+	"github.com/tyundev/x/rest"
 )
 
 var logMarshal = mlog.NewTagLog("rest_cetm")

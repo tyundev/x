@@ -3,7 +3,7 @@ package rest
 import (
 	"runtime/debug"
 
-	//"github.com/reiwav/x/rest/validator"
+	//"github.com/tyundev/x/rest/validator"
 
 	"github.com/gin-gonic/gin"
 	"github.com/golang/glog"
